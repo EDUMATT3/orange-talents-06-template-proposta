@@ -1,5 +1,7 @@
 package com.desafio.zup.proposta.proposta;
 
+import com.desafio.zup.proposta.compartilhado.Documento;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -9,6 +11,7 @@ import java.math.BigDecimal;
 public class NovaPropostaRequest {
 
     @NotBlank
+    @Documento
     private String documento;
 
     @NotBlank
