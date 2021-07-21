@@ -1,7 +1,6 @@
 package com.desafio.zup.proposta.proposta;
 
 import com.desafio.zup.proposta.compartilhado.CustomMockMvc;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.net.URI;
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -42,7 +40,7 @@ public class NovaPropostaControllerTest {
         mvc.post(uri, requestContent)
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(MockMvcResultMatchers.header().exists("location"));
+                .andExpect(MockMvcResultMatchers.header().string("location", "http://localhost/propostas/1"));
     }
 
     @Test
@@ -53,4 +51,9 @@ public class NovaPropostaControllerTest {
                 .andDo(print())
                 .andExpect(status().is(HttpStatus.UNPROCESSABLE_ENTITY.value()));
     }
+
+    //todo: testar os estado da proposta
+//    @Test
+//    @DisplayName("Deve retornar salvar uma proposta com estado ELEGIVEL quando documento não inicia com 3")
+
 }

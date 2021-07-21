@@ -2,10 +2,7 @@ package com.desafio.zup.proposta.proposta;
 
 import com.desafio.zup.proposta.compartilhado.Documento;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -35,6 +32,9 @@ public class Proposta {
     @PositiveOrZero //salario pode ser zero?
     private BigDecimal salario;
 
+    @Enumerated(EnumType.STRING)
+    private EstadoProposta estado;
+
     public Proposta(@NotBlank String documento,
                                @NotBlank @Email String email,
                                @NotBlank String endereco,
@@ -50,4 +50,17 @@ public class Proposta {
     public Long getId() {
         return id;
     }
+
+    public String getDocumento() {
+        return this.documento;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setEstado(EstadoProposta estado) {
+        this.estado = estado;
+    }
 }
+
