@@ -1,4 +1,4 @@
-package com.desafio.zup.proposta.proposta;
+package com.desafio.zup.proposta.proposta.solicitacaoanalise;
 
 public class SolicitacaoAnaliseResponse {
 

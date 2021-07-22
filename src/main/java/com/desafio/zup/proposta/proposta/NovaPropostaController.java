@@ -1,6 +1,8 @@
 package com.desafio.zup.proposta.proposta;
 
 import com.desafio.zup.proposta.compartilhado.ExecutorTransacao;
+import com.desafio.zup.proposta.proposta.solicitacaoanalise.SolicitacaoAnaliseService;
+import com.desafio.zup.proposta.proposta.solicitacaoanalise.SolicitacaoAnaliseStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

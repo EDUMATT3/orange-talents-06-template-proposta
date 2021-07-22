@@ -72,5 +72,25 @@ public class Proposta {
     public void setNumeroCartao(String numeroCartao) {
         this.numeroCartao = numeroCartao;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public BigDecimal getSalario() {
+        return salario;
+    }
+
+    public EstadoProposta getEstado() {
+        return estado;
+    }
+
+    public String getNumeroCartao() {
+        return numeroCartao;
+    }
 }
 

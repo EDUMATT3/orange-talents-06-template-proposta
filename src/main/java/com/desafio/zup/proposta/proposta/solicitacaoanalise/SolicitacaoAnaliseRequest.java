@@ -1,5 +1,6 @@
-package com.desafio.zup.proposta.proposta;
+package com.desafio.zup.proposta.proposta.solicitacaoanalise;
 
+import com.desafio.zup.proposta.proposta.Proposta;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SolicitacaoAnaliseRequest {
