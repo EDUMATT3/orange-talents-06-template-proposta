@@ -35,6 +35,12 @@ public class Proposta {
     @Enumerated(EnumType.STRING)
     private EstadoProposta estado;
 
+    private String numeroCartao;
+
+    @Deprecated
+    public Proposta() {
+    }
+
     public Proposta(@NotBlank String documento,
                                @NotBlank @Email String email,
                                @NotBlank String endereco,
@@ -61,6 +67,10 @@ public class Proposta {
 
     public void setEstado(EstadoProposta estado) {
         this.estado = estado;
+    }
+
+    public void setNumeroCartao(String numeroCartao) {
+        this.numeroCartao = numeroCartao;
     }
 }
 
