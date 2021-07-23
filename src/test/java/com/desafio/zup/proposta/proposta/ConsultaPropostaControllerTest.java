@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,15 +25,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ConsultaPropostaControllerTest {
 
     @Autowired
-    private CustomMockMvc mvc;
+    private MockMvc mockMvc;
 
     private String uri = "/propostas";
 
     private Map<String, Object> requestContent = new HashMap<>();
 
     //aparentemente não pode chamar o método put de um map instanciado de map.of, precisei criar a partir de HashMap
-
-
     @BeforeEach
     void init(){
         requestContent.putAll(Map.of(
@@ -46,9 +45,9 @@ public class ConsultaPropostaControllerTest {
     @Test
     @DisplayName("Deveria retornar status 200 e a dados da proposta com estado ELEGIVEL")
     void teste1() throws Exception {
-        mvc.post(uri, requestContent);
+        CustomMockMvc.post(uri, requestContent, mockMvc);
 
-        mvc.get(uri+"/"+1L)
+        CustomMockMvc.get(uri+"/"+1L, mockMvc)
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("estado").value(EstadoProposta.ELEGIVEL.name()));
@@ -58,9 +57,9 @@ public class ConsultaPropostaControllerTest {
     @DisplayName("Deveria retornar status 200 e a dados da proposta com estado NAO_ELEGIVEL")
     void teste2() throws Exception {
         requestContent.put("documento", "39200455808");
-        mvc.post(uri, requestContent);
+        CustomMockMvc.post(uri, requestContent, mockMvc);
 
-        mvc.get(uri+"/"+1L)
+        CustomMockMvc.get(uri+"/"+1L, mockMvc)
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("estado").value(EstadoProposta.NAO_ELEGIVEL.name()));
@@ -69,7 +68,7 @@ public class ConsultaPropostaControllerTest {
     @Test
     @DisplayName("Deveria salvar nova proposta")
     void teste3() throws Exception {
-        mvc.get(uri+"/"+2L)
+        CustomMockMvc.get(uri+"/"+2L, mockMvc)
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

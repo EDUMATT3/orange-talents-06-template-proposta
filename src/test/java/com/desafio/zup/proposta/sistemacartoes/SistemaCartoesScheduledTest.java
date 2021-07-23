@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.persistence.EntityManager;
@@ -21,8 +22,8 @@ import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc //to resolve: o teste falha sem essa anotação por causa da CustomMockMvc
+@ActiveProfiles("dev")
+@SpringBootTest//to resolve: o teste falha sem essa anotação por causa da CustomMockMvc
 public class SistemaCartoesScheduledTest {
 
     @MockBean

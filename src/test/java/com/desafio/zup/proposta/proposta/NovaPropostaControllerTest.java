@@ -9,10 +9,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Map;
 
+import static com.desafio.zup.proposta.compartilhado.CustomMockMvc.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class NovaPropostaControllerTest {
 
     @Autowired
-    private CustomMockMvc mvc;
+    private MockMvc mockMvc;
 
     private String uri = "/propostas";
 
@@ -37,7 +39,7 @@ public class NovaPropostaControllerTest {
     @Test
     @DisplayName("Deveria salvar nova proposta")
     void teste1() throws Exception {
-        mvc.post(uri, requestContent)
+        post(uri, requestContent, mockMvc)
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(MockMvcResultMatchers.header().string("location", "http://localhost/propostas/1"));
@@ -46,8 +48,8 @@ public class NovaPropostaControllerTest {
     @Test
     @DisplayName("Deve retornar 422(UNPROCESSABLE_ENTITY) caso solicitante ja tenha proposta")
     void teste2() throws Exception {
-        mvc.post(uri, requestContent);
-        mvc.post(uri, requestContent)
+        post(uri, requestContent, mockMvc);
+        post(uri, requestContent, mockMvc)
                 .andDo(print())
                 .andExpect(status().is(HttpStatus.UNPROCESSABLE_ENTITY.value()));
     }

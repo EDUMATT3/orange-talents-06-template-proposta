@@ -1,9 +1,7 @@
 package com.desafio.zup.proposta.compartilhado;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -11,13 +9,15 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Map;
 
-@Component
 public class CustomMockMvc {
 
-    @Autowired
-    private MockMvc mockMvc;
+//    private MockMvc mockMvc;
+//
+//    public CustomMockMvc(MockMvc mockMvc) {
+//        this.mockMvc = mockMvc;
+//    }
 
-    public ResultActions post(String url, Map<String, Object> params) {
+    public static ResultActions post(String url, Map<String, Object> params, MockMvc mockMvc) {
         try {
             String payload = new ObjectMapper()
                     .writeValueAsString(params);
@@ -34,7 +34,7 @@ public class CustomMockMvc {
         }
     }
 
-    public ResultActions get(String url) {
+    public static ResultActions get(String url, MockMvc mockMvc) {
         try {
 
             MockHttpServletRequestBuilder content = MockMvcRequestBuilders
