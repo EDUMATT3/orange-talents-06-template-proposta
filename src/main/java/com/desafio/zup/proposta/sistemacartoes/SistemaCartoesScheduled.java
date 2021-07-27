@@ -5,7 +5,6 @@ import com.desafio.zup.proposta.proposta.Proposta;
 import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +36,7 @@ public class SistemaCartoesScheduled {
         resultList.forEach(proposta -> {
             try {
                 SistemaCartoesResponse response = client.getCartaoByIdProposta(proposta.getId());
-                proposta.setNumeroCartao(response.getId());
+                proposta.adicionaCartao(response.getId());
                 executorTransacao.atualizaEComita(proposta);
             } catch (FeignException e) {
                 logger.error("Não foi possivel encontrar o cartão para a proposta: {}. Motiveo: {}. Resposta: {}", proposta.getId(), e.getMessage(), e.contentUTF8());

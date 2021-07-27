@@ -1,15 +1,7 @@
 package com.desafio.zup.proposta.proposta;
 
-import com.desafio.zup.proposta.compartilhado.Documento;
-import com.desafio.zup.proposta.proposta.EstadoProposta;
-import com.desafio.zup.proposta.proposta.Proposta;
 import org.springframework.util.Assert;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.util.Objects;
 

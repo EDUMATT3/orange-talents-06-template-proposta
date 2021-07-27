@@ -1,6 +1,9 @@
 package com.desafio.zup.proposta.proposta;
 
+import com.desafio.zup.proposta.bloqueio.Bloqueio;
+import com.desafio.zup.proposta.bloqueio.EstadoCartao;
 import com.desafio.zup.proposta.compartilhado.Documento;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -8,7 +11,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
-import java.util.Map;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Proposta {
@@ -36,6 +41,12 @@ public class Proposta {
     private EstadoProposta estado;
 
     private String numeroCartao;
+
+    @Enumerated(EnumType.STRING)
+    private EstadoCartao estadoCartao;
+
+    @OneToMany(mappedBy = "proposta", cascade = CascadeType.MERGE)
+    private List<Bloqueio> bloqueios = Collections.emptyList();
 
     @Deprecated
     public Proposta() {
@@ -69,8 +80,9 @@ public class Proposta {
         this.estado = estado;
     }
 
-    public void setNumeroCartao(String numeroCartao) {
+    public void adicionaCartao(String numeroCartao) {
         this.numeroCartao = numeroCartao;
+        this.estadoCartao = EstadoCartao.DESBLOQUEADO;
     }
 
     public String getEmail() {
@@ -91,6 +103,20 @@ public class Proposta {
 
     public String getNumeroCartao() {
         return numeroCartao;
+    }
+
+    public boolean estaBloqueado() {
+        Assert.notNull(this.numeroCartao, "Este metodo deveria ser chamado após adionar um cartão");
+        return this.estadoCartao.equals(EstadoCartao.BLOQUEADO);
+    }
+
+    public void bloquear(String ip, String userAgent) {
+        Assert.isTrue(!estaBloqueado(), "Não deveria bloquear um cartão já bloqueado");
+        Assert.hasText(ip, "Ip deveria estar presente");
+        Assert.hasText(userAgent, "UserAgent deveria estar presente");
+
+        this.estadoCartao = EstadoCartao.BLOQUEADO;
+        this.bloqueios.add(new Bloqueio(ip, userAgent, this));
     }
 }
 
