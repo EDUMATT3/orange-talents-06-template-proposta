@@ -1,5 +1,7 @@
 package com.desafio.zup.proposta.proposta;
 
+import com.desafio.zup.proposta.avisoviagem.AvisoViagem;
+import com.desafio.zup.proposta.avisoviagem.NovoAvisoViagemRequest;
 import com.desafio.zup.proposta.bloqueio.Bloqueio;
 import com.desafio.zup.proposta.bloqueio.EstadoCartao;
 import com.desafio.zup.proposta.compartilhado.Documento;
@@ -47,6 +49,9 @@ public class Proposta {
 
     @OneToMany(mappedBy = "proposta", cascade = CascadeType.MERGE)
     private List<Bloqueio> bloqueios = Collections.emptyList();
+
+    @OneToMany(mappedBy = "proposta", cascade = CascadeType.MERGE)
+    private List<AvisoViagem> avisoViagens = Collections.emptyList();;
 
     @Deprecated
     public Proposta() {
@@ -117,6 +122,14 @@ public class Proposta {
 
         this.estadoCartao = EstadoCartao.BLOQUEADO;
         this.bloqueios.add(new Bloqueio(ip, userAgent, this));
+    }
+
+    public void adicionaAvisoViagem(NovoAvisoViagemRequest body, String ip, String userAgent) {
+        Assert.notNull(this.numeroCartao, "Este metodo deveria ser chamado após adionar um cartão");
+        Assert.hasText(ip, "Ip deveria estar presente");
+        Assert.hasText(userAgent, "UserAgent deveria estar presente");
+
+        this.avisoViagens.add(new AvisoViagem(ip, userAgent, body.getDestino(), body.getTermino(), this));
     }
 }
 

@@ -154,35 +154,35 @@ services:
       VAULT_TOKEN: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_ADDR: http://127.0.0.1:8200
 
-  mysql-propostas:
-    image: mysql
-    environment:
-      - MYSQL_USER=proposta
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=proposta
-      - MYSQL_PASSWORD=password
-    networks:
-      - propostas-network
-    ports:
-      - 3306:3306
+#  mysql-propostas:
+#    image: mysql
+#    environment:
+#      - MYSQL_USER=proposta
+#      - MYSQL_ROOT_PASSWORD=password
+#      - MYSQL_DATABASE=proposta
+#      - MYSQL_PASSWORD=password
+#    networks:
+#      - propostas-network
+#    ports:
+#      - 3306:3306
 
-  proposta:
-    build:
-      dockerfile: ./
-      context: .
-    image: edumatt3/proposta
-    container_name: proposta
-    ports:
-      - 8081:8080
-    environment:
-      DATABASE_URL: jdbc:mysql://mysql-propostas:3306/proposta
-      SPRING_PROFILES_ACTIVE: prod
-      DATABASE_USERNAME: proposta
-      DATABASE_PASSWORD: password
-    networks:
-      - propostas-network
-    depends_on:
-      - mysql-propostas
+#  proposta:
+#    build:
+#      dockerfile: ./
+#      context: .
+#    image: edumatt3/proposta
+#    container_name: proposta
+#    ports:
+#      - 8081:8080
+#    environment:
+#      DATABASE_URL: jdbc:mysql://mysql-propostas:3306/proposta
+#      SPRING_PROFILES_ACTIVE: prod
+#      DATABASE_USERNAME: proposta
+#      DATABASE_PASSWORD: password
+#    networks:
+#      - propostas-network
+#    depends_on:
+#      - mysql-propostas
 
 volumes:
   grafana-volume:
