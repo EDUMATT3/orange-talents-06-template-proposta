@@ -1,8 +1,11 @@
 package com.desafio.zup.proposta.proposta;
 
 import com.desafio.zup.proposta.compartilhado.ExecutorTransacao;
+import com.desafio.zup.proposta.compartilhado.Metricas;
 import com.desafio.zup.proposta.proposta.solicitacaoanalise.SolicitacaoAnaliseService;
 import com.desafio.zup.proposta.proposta.solicitacaoanalise.SolicitacaoAnaliseStatus;
+import io.micrometer.core.instrument.Tag;
+import io.micrometer.core.instrument.Tags;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,11 +28,13 @@ public class NovaPropostaController {
     private EntityManager em;
     private ExecutorTransacao executorTransacao;
     private SolicitacaoAnaliseService solicitacaoAnaliseService;
+    private Metricas metricas;
 
-    public NovaPropostaController(EntityManager em, ExecutorTransacao executorTransacao, SolicitacaoAnaliseService solicitacaoAnaliseService) {
+    public NovaPropostaController(EntityManager em, ExecutorTransacao executorTransacao, SolicitacaoAnaliseService solicitacaoAnaliseService, Metricas metricas) {
         this.em = em;
         this.executorTransacao = executorTransacao;
         this.solicitacaoAnaliseService = solicitacaoAnaliseService;
+        this.metricas = metricas;
     }
 
     @PostMapping
@@ -49,6 +54,8 @@ public class NovaPropostaController {
         executorTransacao.atualizaEComita(novaProposta);
 
         logger.info("Proposta criada com id: {}", novaProposta.getId());
+
+        metricas.contador("proposta-criada", Tags.of("banco", "itáu"));
 
         URI location = builder.path("/propostas/{id}").build(novaProposta.getId());
         return ResponseEntity.created(location).build();

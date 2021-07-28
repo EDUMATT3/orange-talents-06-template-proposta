@@ -2,34 +2,35 @@ package com.desafio.zup.proposta.sistemacartoes;
 
 import com.desafio.zup.proposta.compartilhado.ExecutorTransacao;
 import com.desafio.zup.proposta.proposta.Proposta;
+import com.desafio.zup.proposta.proposta.PropostaRepository;
 import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
 import java.util.List;
+
+import static com.desafio.zup.proposta.proposta.EstadoProposta.ELEGIVEL;
 
 @Component
 public class SistemaCartoesScheduled {
 
-    private EntityManager em;
+    private PropostaRepository propostaRepository;
     private SistemaCartoesFeignClient client;
     private ExecutorTransacao executorTransacao;
 
     private final Logger logger = LoggerFactory.getLogger(SistemaCartoesScheduled.class);
 
-    public SistemaCartoesScheduled(EntityManager em, SistemaCartoesFeignClient client, ExecutorTransacao executorTransacao) {
-        this.em = em;
+    public SistemaCartoesScheduled(PropostaRepository propostaRepository, SistemaCartoesFeignClient client, ExecutorTransacao executorTransacao) {
+        this.propostaRepository = propostaRepository;
         this.client = client;
         this.executorTransacao = executorTransacao;
     }
 
     @Scheduled(fixedDelayString = "${cartoes.associacao.delay}")
     public void doAlgo() throws Exception{
-        List<Proposta> resultList = em.createQuery("SELECT p FROM Proposta p where p.estado = 'ELEGIVEL' and p.numeroCartao = null", Proposta.class)
-                .getResultList();
+        List<Proposta> resultList = propostaRepository.getPropostasElegiveisSemCartao();
 
         logger.info("Propostas elegiveis e sem cartão associado - tamanho: {}", resultList.size());
 

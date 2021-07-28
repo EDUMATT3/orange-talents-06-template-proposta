@@ -39,16 +39,6 @@ services:
     networks:
       - propostas-network
 
-  postgresProposta:
-    image: 'postgres:alpine'
-    ports:
-      - 5433:5432
-    environment:
-      POSTGRES_USER: proposta
-      POSTGRES_PASSWORD: password
-    networks:
-      - propostas-network
-
   keycloak:
     image: jboss/keycloak
     ports:
@@ -137,6 +127,9 @@ services:
     image: prom/prometheus
     volumes:
       - prometheus-volume:/etc/prometheus/
+      - ./src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
       - "9090:9090"
     networks:
@@ -161,6 +154,18 @@ services:
       VAULT_TOKEN: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_ADDR: http://127.0.0.1:8200
 
+  mysql-propostas:
+    image: mysql
+    environment:
+      - MYSQL_USER=proposta
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=proposta
+      - MYSQL_PASSWORD=password
+    networks:
+      - propostas-network
+    ports:
+      - 3306:3306
+
   proposta:
     build:
       dockerfile: ./
@@ -170,14 +175,14 @@ services:
     ports:
       - 8081:8080
     environment:
-      DATABASE_URL: jdbc:postgresql://postgresProposta:5432/proposta
+      DATABASE_URL: jdbc:mysql://mysql-propostas:3306/proposta
       SPRING_PROFILES_ACTIVE: prod
       DATABASE_USERNAME: proposta
       DATABASE_PASSWORD: password
     networks:
       - propostas-network
     depends_on:
-      - postgresProposta
+      - mysql-propostas
 
 volumes:
   grafana-volume:

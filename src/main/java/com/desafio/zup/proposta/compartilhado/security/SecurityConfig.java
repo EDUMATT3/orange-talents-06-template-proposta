@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
-@Profile("!dev")
+@Profile("default")
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -24,6 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .antMatchers(HttpMethod.POST, "/biometrias/**").hasAuthority("SCOPE_cartoes:write")
                                 .antMatchers(HttpMethod.POST, "/propostas/**").hasAuthority("SCOPE_propostas:write")
                                 .antMatchers(HttpMethod.GET,"/actuator/**").hasAuthority("SCOPE_actuator:read")
+                                .antMatchers(HttpMethod.GET, "/actuator/prometheus").permitAll()
                                 .antMatchers( "/cartoes/**").hasAuthority("SCOPE_cartoes:write")
                                 .antMatchers("/h2-console/**").permitAll()
                                 .anyRequest().authenticated()
