@@ -4,6 +4,8 @@ import com.desafio.zup.proposta.avisoviagem.AvisoViagem;
 import com.desafio.zup.proposta.avisoviagem.NovoAvisoViagemRequest;
 import com.desafio.zup.proposta.bloqueio.Bloqueio;
 import com.desafio.zup.proposta.bloqueio.EstadoCartao;
+import com.desafio.zup.proposta.carteira.Carteira;
+import com.desafio.zup.proposta.carteira.NovaCateiraRequest;
 import com.desafio.zup.proposta.compartilhado.Documento;
 import org.springframework.util.Assert;
 
@@ -15,7 +17,8 @@ import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
+
+import static com.desafio.zup.proposta.carteira.CarteiraDigital.PAYPAL;
 
 @Entity
 public class Proposta {
@@ -51,7 +54,10 @@ public class Proposta {
     private List<Bloqueio> bloqueios = Collections.emptyList();
 
     @OneToMany(mappedBy = "proposta", cascade = CascadeType.MERGE)
-    private List<AvisoViagem> avisoViagens = Collections.emptyList();;
+    private List<AvisoViagem> avisoViagens = Collections.emptyList();
+
+    @OneToMany(mappedBy = "proposta", cascade = CascadeType.MERGE)
+    private List<Carteira> carteiras = Collections.emptyList();
 
     @Deprecated
     public Proposta() {
@@ -130,6 +136,10 @@ public class Proposta {
         Assert.hasText(userAgent, "UserAgent deveria estar presente");
 
         this.avisoViagens.add(new AvisoViagem(ip, userAgent, body.getDestino(), body.getTermino(), this));
+    }
+
+    public boolean temCarteiraAssociada() {
+        return !this.carteiras.isEmpty();
     }
 }
 
