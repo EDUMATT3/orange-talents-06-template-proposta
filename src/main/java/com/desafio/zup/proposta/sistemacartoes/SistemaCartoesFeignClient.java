@@ -1,5 +1,6 @@
 package com.desafio.zup.proposta.sistemacartoes;
 
+import com.desafio.zup.proposta.avisoviagem.NovoAvisoViagemRequest;
 import feign.Response;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,5 +18,8 @@ public interface SistemaCartoesFeignClient {
 
     @PostMapping("{id}/bloqueios")
     Response nofiticarBloqueio(@PathVariable String id, Map<String, String> body);
+
+    @PostMapping("{id}/avisos")
+    Response nofiticarViagem(@PathVariable String id, Map<String, Object> body);
 
 }
