@@ -1,5 +1,5 @@
 package com.desafio.zup.proposta.carteira;
 
 public enum CarteiraDigital {
-    PAYPAL;
+    PAYPAL, SAMSUMG_PAY;
 }

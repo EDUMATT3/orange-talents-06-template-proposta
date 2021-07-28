@@ -6,6 +6,7 @@ import org.springframework.util.Assert;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 public class NovaCateiraRequest {
@@ -14,18 +15,18 @@ public class NovaCateiraRequest {
     @Email
     private String email;
 
-    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public NovaCateiraRequest(String email) {
-        this.email = email;
-    }
+    @NotNull
+    private CarteiraDigital carteiraDigital;
 
-    public String getEmail() {
-        return email;
+    public NovaCateiraRequest(@NotBlank @Email String email,
+                              @NotNull CarteiraDigital carteiraDigital) {
+        this.email = email;
+        this.carteiraDigital = carteiraDigital;
     }
 
     public Carteira toModel(Proposta proposta) {
         Assert.state(Objects.nonNull(proposta), "Proposta não deveria ser nula");
 
-        return new Carteira(email, CarteiraDigital.PAYPAL ,proposta);
+        return new Carteira(email, carteiraDigital ,proposta);
     }
 }

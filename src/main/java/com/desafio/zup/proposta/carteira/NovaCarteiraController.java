@@ -44,15 +44,17 @@ public class NovaCarteiraController {
 
         Proposta proposta = possivelProposta.get();
 
-        if(proposta.temCarteiraAssociada()){
+        Carteira novaCarteira = request.toModel(proposta);
+
+        if(proposta.temCarteiraAssociada(novaCarteira)){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
 
-        Carteira novaCarteira = request.toModel(proposta);
-
+        em.persist(novaCarteira);
         logger.info("Adionada carteira com id: {}", novaCarteira.getId());
 
         URI location = builder.path("/cartoes/{idCartao}/carteiras/{idCarteira}").buildAndExpand(id, novaCarteira.getId()).toUri();
+
         return ResponseEntity.created(location).build();
     }
 }

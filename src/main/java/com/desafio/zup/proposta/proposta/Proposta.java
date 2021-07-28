@@ -56,7 +56,7 @@ public class Proposta {
     @OneToMany(mappedBy = "proposta", cascade = CascadeType.MERGE)
     private List<AvisoViagem> avisoViagens = Collections.emptyList();
 
-    @OneToMany(mappedBy = "proposta", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "proposta")
     private List<Carteira> carteiras = Collections.emptyList();
 
     @Deprecated
@@ -138,8 +138,8 @@ public class Proposta {
         this.avisoViagens.add(new AvisoViagem(ip, userAgent, body.getDestino(), body.getTermino(), this));
     }
 
-    public boolean temCarteiraAssociada() {
-        return !this.carteiras.isEmpty();
+    public boolean temCarteiraAssociada(Carteira novaCarteira) {
+        return this.carteiras.contains(novaCarteira);
     }
 }
 

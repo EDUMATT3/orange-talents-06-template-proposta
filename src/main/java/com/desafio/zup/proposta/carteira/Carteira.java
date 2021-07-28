@@ -37,4 +37,19 @@ public class Carteira {
     public Long getId() {
         return id;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Carteira carteira = (Carteira) o;
+
+        return carteiraDigital == carteira.carteiraDigital;
+    }
+
+    @Override
+    public int hashCode() {
+        return carteiraDigital != null ? carteiraDigital.hashCode() : 0;
+    }
 }
