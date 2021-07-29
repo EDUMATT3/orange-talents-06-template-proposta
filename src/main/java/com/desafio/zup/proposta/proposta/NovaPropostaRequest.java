@@ -1,6 +1,8 @@
 package com.desafio.zup.proposta.proposta;
 
 import com.desafio.zup.proposta.compartilhado.Documento;
+import com.desafio.zup.proposta.compartilhado.security.EncriptadorDocumento;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.EntityManager;
 import javax.validation.constraints.Email;
@@ -39,12 +41,12 @@ public class NovaPropostaRequest {
     }
 
     public Proposta toModel() {
-        return new Proposta(documento, email, endereco, nome, salario);
+        return new Proposta(EncriptadorDocumento.encriptar(documento), email, endereco, nome, salario);
     }
 
     public boolean solicitanteTemProposta(EntityManager em) {
         return (boolean) em.createQuery("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM Proposta p WHERE p.documento=?1")
-                .setParameter(1, this.documento)
+                .setParameter(1, EncriptadorDocumento.encriptar(documento))
                 .getSingleResult();
     }
 

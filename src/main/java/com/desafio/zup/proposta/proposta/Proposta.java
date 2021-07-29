@@ -7,6 +7,8 @@ import com.desafio.zup.proposta.bloqueio.EstadoCartao;
 import com.desafio.zup.proposta.carteira.Carteira;
 import com.desafio.zup.proposta.carteira.NovaCateiraRequest;
 import com.desafio.zup.proposta.compartilhado.Documento;
+import com.desafio.zup.proposta.compartilhado.security.EncriptadorDocumento;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -28,7 +30,6 @@ public class Proposta {
     private Long id;
 
     @NotBlank
-    @Documento
     private String documento;
 
     @NotBlank
