@@ -4,8 +4,9 @@ import com.desafio.zup.proposta.compartilhado.ExecutorTransacao;
 import com.desafio.zup.proposta.compartilhado.Metricas;
 import com.desafio.zup.proposta.proposta.solicitacaoanalise.SolicitacaoAnaliseService;
 import com.desafio.zup.proposta.proposta.solicitacaoanalise.SolicitacaoAnaliseStatus;
-import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,12 +30,14 @@ public class NovaPropostaController {
     private ExecutorTransacao executorTransacao;
     private SolicitacaoAnaliseService solicitacaoAnaliseService;
     private Metricas metricas;
+    private Tracer tracer;
 
-    public NovaPropostaController(EntityManager em, ExecutorTransacao executorTransacao, SolicitacaoAnaliseService solicitacaoAnaliseService, Metricas metricas) {
+    public NovaPropostaController(EntityManager em, ExecutorTransacao executorTransacao, SolicitacaoAnaliseService solicitacaoAnaliseService, Metricas metricas, Tracer tracer) {
         this.em = em;
         this.executorTransacao = executorTransacao;
         this.solicitacaoAnaliseService = solicitacaoAnaliseService;
         this.metricas = metricas;
+        this.tracer = tracer;
     }
 
     @PostMapping
@@ -52,6 +55,9 @@ public class NovaPropostaController {
         novaProposta.setEstado(analiseStatus.getEstado());
 
         executorTransacao.atualizaEComita(novaProposta);
+
+        Span activeSpan = tracer.activeSpan();
+        activeSpan.setTag("proposta.documento", request.getDocumento());
 
         logger.info("Proposta criada com id: {}", novaProposta.getId());
 
